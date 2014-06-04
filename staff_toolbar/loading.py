@@ -42,12 +42,18 @@ def load_toolbar_item(import_path, *args, **kwargs):
     :param kwargs: For classes, any keyword arguments to pass to the constructor.
     """
     if isinstance(import_path, (tuple, list)):
-        return Group(*import_path)
+        children = [load_toolbar_item(path) for path in import_path]
+        return Group(*children)
+    elif isinstance(import_path, basestring):
+        symbol = _import_symbol(import_path, 'STAFF_TOOLBAR_ITEMS')
+    else:
+        symbol = import_path
 
-    symbol = _import_symbol(import_path, 'STAFF_TOOLBAR_ITEMS')
     if inspect.isclass(symbol):
+        # Instantiate the class.
         symbol = symbol(*args, **kwargs)
-    elif not callable(symbol):
+
+    if not callable(symbol):
         raise ImproperlyConfigured("The {0} in {1} is not callable!".format(import_path, 'STAFF_TOOLBAR_ITEMS'))
 
     return symbol
