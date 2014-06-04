@@ -17,6 +17,29 @@ __all__ = (
 )
 
 
+class Title(object):
+    """
+    A title in the toolbar.
+    """
+    def __init__(self, title):
+        self.title = title
+
+    def __call__(self, request, context):
+        return format_html(u'<div class="toolbar-title">{0}</div>', self.title)
+
+
+class Literal(object):
+    """
+    A literal object, that is outputted as-is.
+    Use ``format_html()`` or ``mark_safe()`` to output literal HTML.
+    """
+    def __init__(self, title):
+        self.title = title
+
+    def __call__(self, request, context):
+        return self.title
+
+
 class Group(object):
     """
     A group of items

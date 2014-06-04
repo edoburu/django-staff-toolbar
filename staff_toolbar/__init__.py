@@ -1,5 +1,26 @@
 # following PEP 386
+
 __version__ = "0.9"
+
+__all__ = (
+    'toolbar_title',
+    'toolbar_item',
+    'toolbar_literal',
+)
+
+
+def toolbar_title(title):
+    """
+    Define a title to be included in the toolbar.
+    """
+    return LazyToolbarItem('staff_toolbar.items.Title', title)
+
+
+def toolbar_literal(title):
+    """
+    Define a literal text to be included in the toolbar.
+    """
+    return LazyToolbarItem('staff_toolbar.items.Literal', title)
 
 
 def toolbar_item(callable_path, *args, **kwargs):
