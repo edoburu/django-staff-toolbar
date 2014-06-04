@@ -48,13 +48,8 @@ class Group(object):
     title = None
 
     def __init__(self, *children, **kwargs):
-        self.children = children
+        self.children = list(children)
         self.title = kwargs.get('title', self.title)
-
-        # self-check
-        for child in children:
-            if isinstance(child, basestring) or not callable(child):
-                raise ImproperlyConfigured("The toolbar item '{0}' is not a callable".format(child))
 
     def __call__(self, request, context):
         """
@@ -67,8 +62,14 @@ class Group(object):
         """
         Get all rows as HTML
         """
+        from staff_toolbar.loading import load_toolbar_item
         rows = []
-        for hook in self.children:
+        for i, hook in enumerate(self.children):
+            # Allow dotted paths in groups too, loads on demand (get import errors otherwise).
+            if isinstance(hook, (basestring, tuple, list)):
+                hook = load_toolbar_item(hook)
+                self.children[i] = hook
+
             html = hook(request, context)
             if not html:
                 continue
