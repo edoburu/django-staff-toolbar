@@ -6,7 +6,8 @@ Displaying staff-only controls at a webpage.
 Features:
 
 * Linking to the admin page of the current object.
-* Full configuration and customization of the displayed toolbar items.
+* Full configuration of the displayed toolbar items.
+* API for adding custom menu items.
 
 This package has been tested in Django 1.5.
 
@@ -86,6 +87,60 @@ In the template, you can include::
 When needed, the URL can also be set::
 
     {% set_staff_url %}{% url 'dashboard:catalogue-product' object.id %}{% end_set_staff_url %}
+
+
+Customizing the menu
+====================
+
+The default menu settings are::
+
+    STAFF_TOOLBAR_ITEMS = (
+        'staff_toolbar.items.AdminIndexLink',
+        'staff_toolbar.items.ChangeObjectLink',
+        'staff_toolbar.items.LogoutLink',
+    )
+
+Each line represents a callable, which is called using ``(request, context)``.
+When a tuple is included, this is converted into a new ``Group`` object,
+causing an additional ``<ul>`` tag to appear in the output.
+
+A more complex example::
+
+    from django.core.urlresolvers import reverse_lazy
+    from django.utils.translation import ugettext_lazy as _
+    from staff_toolbar import toolbar_item, toolbar_title, toolbar_literal
+
+    STAFF_TOOLBAR_ITEMS = (
+        'staff_toolbar.items.AdminIndexLink',
+        'staff_toolbar.items.ChangeObjectLink',
+        (
+            toolbar_title(_("User")),
+            toolbar_item('staff_toolbar.items.Link', url=reverse_lazy('admin:password_change'), title=_("Change password")),
+            'staff_toolbar.items.LogoutLink',
+        )
+    )
+
+The ``toolbar_title()`` and ``toolbar_item()`` functions allow to pass additional arguments
+to the items, without having to load them already in the settings.
+
+It's also perfectly possible to instantiate the actual classes directly,
+however this may risk import errors as it causes your settings module to load a lot of other code.
+The following is functionally equivalent to the previous example::
+
+    from django.core.urlresolvers import reverse_lazy
+    from django.utils.translation import ugettext_lazy as _
+    from staff_toolbar.items import AdminIndexLink, ChangeObjectLink, Group, ToolbarTitle, Link, LogoutLink
+
+    STAFF_TOOLBAR_ITEMS = (
+        AdminIndexLink(),
+        ChangeObjectLink(),
+        Group(
+            ToolbarTitle(_("User")),
+            Link(url=reverse_lazy('admin:password_change'), title=_("Change password")),
+            LogoutLink(),
+        )
+    )
+
 
 
 Contributing
