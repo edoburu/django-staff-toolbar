@@ -38,7 +38,7 @@ class LazyToolbarItem(object):
     def __init__(self, import_path, *args, **kwargs):
         self.import_path = import_path
         self.args = args
-        self.kargs = kwargs
+        self.kwargs = kwargs
         self.real_instance = None
 
     def __call__(self, request, context):
