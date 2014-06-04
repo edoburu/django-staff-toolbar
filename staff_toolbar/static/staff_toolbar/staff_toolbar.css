@@ -1,0 +1,47 @@
+#django-staff-toolbar {
+  position: fixed;
+  right: 40px;
+  bottom: 40px;
+  margin: 10px;
+  padding: 0;
+  z-index: 10000;
+  background-color: white;
+  border: 1px solid #cccccc;
+  box-shadow: 0 0 0 5px rgba(0, 0, 0, 0.1), 0 1px #dddddd inset, 0 2px #eeeeee inset;
+  border-radius: 5px;
+  color: #333333;
+  font-family: sans-serif;
+}
+#django-staff-toolbar .toolbar-title {
+  font-weight: bold;
+  font-size: 10px;
+  padding: 4px 0 0 8px;
+}
+#django-staff-toolbar ul {
+  list-style: none;
+  list-style-position: inside;
+  margin: 5px 0;
+  padding: 0;
+}
+#django-staff-toolbar li {
+  margin: 0;
+  padding: 0;
+}
+#django-staff-toolbar li a {
+  color: #333333;
+  display: block;
+  font-size: 12px;
+  height: 30px;
+  line-height: 30px;
+  padding: 0 18px;
+  position: relative;
+  white-space: nowrap;
+  text-decoration: none;
+}
+#django-staff-toolbar li a:hover {
+  text-decoration: none;
+  background-color: #cccccc;
+}
+#django-staff-toolbar li a:active {
+  box-shadow: 0 2px black inset, 0 -1px #dddddd inset;
+}

@@ -1,0 +1,65 @@
+$staff-toolbar-background: #fff !default;
+$staff-toolbar-border: 1px solid #ccc !default;
+$staff-toolbar-box-shadow: 0 0 0 5px rgba(0, 0, 0, 0.1), 0 1px #ddd inset, 0 2px #eee inset !default;
+$staff-toolbar-color: #333 !default;
+$staff-toolbar-font: sans-serif !default;
+
+$staff-toolbar-hover-background: #ccc !default;
+$staff-toolbar-active-box-shadow: 0 2px #000000 inset, 0 -1px #ddd inset !default;
+
+
+#django-staff-toolbar {
+  position: fixed;
+  right: 40px;
+  bottom: 40px;
+  margin: 10px;
+  padding: 0;
+  z-index: 10000;
+
+  background-color: $staff-toolbar-background;
+  border: $staff-toolbar-border;
+  box-shadow: $staff-toolbar-box-shadow;
+  border-radius: 5px;
+  color: $staff-toolbar-color;
+
+  font-family: $staff-toolbar-font;
+
+  .toolbar-title {
+    font-weight: bold;
+    font-size: 10px;
+    padding: 4px 0 0 8px;
+  }
+
+  ul {
+    list-style: none;
+    list-style-position: inside;
+    margin: 5px 0;
+    padding: 0;
+  }
+
+  li {
+    margin: 0;
+    padding: 0;
+
+    a {
+      color: $staff-toolbar-color;
+      display: block;
+      font-size: 12px;
+      height: 30px;
+      line-height: 30px;
+      padding: 0 18px;
+      position: relative;
+      white-space: nowrap;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: none;
+        background-color: $staff-toolbar-hover-background;
+      }
+
+      &:active {
+        box-shadow: $staff-toolbar-active-box-shadow;
+      }
+    }
+  }
+}
