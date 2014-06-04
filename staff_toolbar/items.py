@@ -44,8 +44,11 @@ class Group(object):
     """
     A group of items
     """
-    def __init__(self, *children):
+    title = None
+
+    def __init__(self, *children, **kwargs):
         self.children = children
+        self.title = kwargs.get('title', self.title)
 
     def __call__(self, request, context):
         """
@@ -74,8 +77,11 @@ class Group(object):
         if not rows:
             return ''
 
-        li_tags = u"\n".join(format_html(u'<li>{0}</li>', force_text(row)) for row in rows)
-        return mark_safe(u'<ul>\n{0}\n</ul>'.format(li_tags))
+        li_tags = mark_safe(u"\n".join(format_html(u'<li>{0}</li>', force_text(row)) for row in rows))
+        if self.title:
+            return format_html(u'<div class="toolbar-title">{0}</div>\n<ul>\n{1}\n</ul>', self.title, li_tags)
+        else:
+            return format_html(u'<ul>\n{0}\n</ul>', li_tags)
 
 
 class RootNode(Group):
@@ -84,9 +90,6 @@ class RootNode(Group):
     """
     title = _("Staff features")
 
-    def render(self, rows):
-        ul = super(RootNode, self).render(rows)
-        return format_html(u'<div class="toolbar-title">{0}</div>{1}', self.title, ul)
 
 
 class Link(object):
