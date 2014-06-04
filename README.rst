@@ -30,24 +30,17 @@ Add the application to ``settings.py``::
         'staff_toolbar',
     )
 
-Make sure the ``request`` is exposed to the template::
-
-    TEMPLATE_CONTEXT_PROCESSORS = (
-        'django.core.context_processors.i18n',
-        'django.core.context_processors.media',
-        'django.core.context_processors.request',  # Add this one!
-        'django.core.context_processors.static',
-        'django.contrib.auth.context_processors.auth',
-        'django.contrib.messages.context_processors.messages',
-    )
+Make sure the ``django.core.context_processors.request`` is included in ``TEMPLATE_CONTEXT_PROCESSORS``.
 
 Add the HTML widget to the template::
 
     {% load staff_toolbar_tags %}
 
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}staff_toolbar/staff_toolbar.css" />
-
     {% staff_toolbar %}
+
+Make sure the layout is loaded in the template::
+
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}staff_toolbar/staff_toolbar.css" />
 
 Layout
 ------
@@ -59,8 +52,8 @@ The source SASS file is included, making it easier to
 integrate this into your project stylesheets when needed.
 
 
-Defining the admin URL
-======================
+Customizing the admin URL
+=========================
 
 The admin URL is auto-detected using:
 

@@ -1,8 +1,8 @@
 Changelog
 =========
 
-Version 0.1 (dev)
------------------
+Version 0.9
+-----------
 
 * Initial release
 
