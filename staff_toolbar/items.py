@@ -2,6 +2,7 @@
 These are the items that can be added to the staff toolbar.
 """
 from django.contrib.admin.templatetags.admin_urls import admin_urlname
+from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe
@@ -49,6 +50,11 @@ class Group(object):
     def __init__(self, *children, **kwargs):
         self.children = children
         self.title = kwargs.get('title', self.title)
+
+        # self-check
+        for child in children:
+            if isinstance(child, basestring) or not callable(child):
+                raise ImproperlyConfigured("The toolbar item '{0}' is not a callable".format(child))
 
     def __call__(self, request, context):
         """
