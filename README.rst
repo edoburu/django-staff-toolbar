@@ -10,6 +10,11 @@ Features:
 
 This package has been tested in Django 1.5.
 
+.. image:: https://github.com/edoburu/django-staff-toolbar/raw/master/docs/images/staff_toolbar.png
+   :width: 142px
+   :height: 136px
+   :alt: django-staff-toolbar preview
+
 
 Installation
 ============
