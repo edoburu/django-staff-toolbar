@@ -142,6 +142,15 @@ The following is functionally equivalent to the previous example::
     )
 
 
+Caveats
+=======
+
+For HTTPS sites with ``SESSION_COOKIE_SECURE = True`` the toolbar obviously
+won't show up in the standard pages that are served by HTTP.
+
+Either display all pages on HTTPS (which is the Right Way™ after all),
+or please provide a good pull request that solves this nicely for mixed sites.
+
 
 Contributing
 ============
