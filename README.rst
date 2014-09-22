@@ -9,7 +9,7 @@ Features:
 * Full configuration of the displayed toolbar items.
 * API for adding custom menu items.
 
-This package has been tested in Django 1.5.
+This package has been tested in Django 1.5 and 1.6.
 
 .. image:: https://github.com/edoburu/django-staff-toolbar/raw/master/docs/images/staff_toolbar.png
    :width: 142px
