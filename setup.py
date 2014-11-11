@@ -2,8 +2,8 @@
 from setuptools import setup, find_packages
 from os import path
 import codecs
-import os
 import re
+import os
 import sys
 
 
@@ -66,5 +66,7 @@ setup(
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
         'Topic :: Software Development :: Libraries :: Python Modules',
-    ]
+    ],
+    tests_require=['mock', 'beautifulsoup4'],
+    test_suite='tests',
 )

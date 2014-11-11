@@ -2,19 +2,15 @@
 These are the items that can be added to the staff toolbar.
 """
 from django.contrib.admin.templatetags.admin_urls import admin_urlname
-from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.utils.encoding import force_text
-from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.translation import ugettext_lazy as _
 from django.utils.html import format_html
 
 __all__ = (
     'Group',
     'RootNode',
     'Link',
-    'AdminLink',
-    'ObjectNode',
 )
 
 
@@ -25,7 +21,7 @@ class Title(object):
     def __init__(self, title):
         self.title = title
 
-    def __call__(self, request, context):
+    def __call__(self, context):
         return format_html(u'<div class="toolbar-title">{0}</div>', self.title)
 
 
@@ -37,7 +33,7 @@ class Literal(object):
     def __init__(self, title):
         self.title = title
 
-    def __call__(self, request, context):
+    def __call__(self, context):
         return self.title
 
 
@@ -51,44 +47,8 @@ class Group(object):
         self.children = list(children)
         self.title = kwargs.get('title', self.title)
 
-    def __call__(self, request, context):
-        """
-        Render the group
-        """
-        rows = self.get_rows(request, context)
-        return self.render(rows)
-
-    def get_rows(self, request, context):
-        """
-        Get all rows as HTML
-        """
-        from staff_toolbar.loading import load_toolbar_item
-        rows = []
-        for i, hook in enumerate(self.children):
-            # Allow dotted paths in groups too, loads on demand (get import errors otherwise).
-            if isinstance(hook, (basestring, tuple, list)):
-                hook = load_toolbar_item(hook)
-                self.children[i] = hook
-
-            html = hook(request, context)
-            if not html:
-                continue
-
-            rows.append(html)
-        return rows
-
-    def render(self, rows):
-        """
-        Join the HTML rows.
-        """
-        if not rows:
-            return ''
-
-        li_tags = mark_safe(u"\n".join(format_html(u'<li>{0}</li>', force_text(row)) for row in rows))
-        if self.title:
-            return format_html(u'<div class="toolbar-title">{0}</div>\n<ul>\n{1}\n</ul>', self.title, li_tags)
-        else:
-            return format_html(u'<ul>\n{0}\n</ul>', li_tags)
+    def __call__(self, context):
+        return ''
 
 
 class RootNode(Group):
@@ -96,7 +56,6 @@ class RootNode(Group):
     The root node for the toolbar.
     """
     title = _("Staff features")
-
 
 
 class Link(object):
@@ -112,14 +71,14 @@ class Link(object):
         self.url = url or self.url
         self.title = title or self.title
 
-    def __call__(self, request, context):
-        linkdata = self.get_link(request, context)
+    def __call__(self, context):
+        linkdata = self.get_link(context)
         if linkdata:
             return format_html(u'<a href="{0}">{1}</a>', *linkdata)
         else:
             return None
 
-    def get_link(self, request, context):
+    def get_link(self, context):
         return (self.url, self.title)
 
 
@@ -143,8 +102,9 @@ class ChangeObjectLink(Link):
     * ``view.get_staff_object()`
     * ``view.get_staff_url()`
     """
-    def get_link(self, request, context):
-        # When `set_staff_object` is used, take that information,
+    def get_link(self, context):
+        request = context['request']
+        # When `staff_object` is used, take that information,
         object = getattr(request, 'staff_object', None)
         url = getattr(request, 'staff_url', None)
 
@@ -182,7 +142,6 @@ class LogoutLink(Link):
     """
     url = reverse_lazy('admin:logout')
     title = _("Logout")
-
 
 
 def get_object(context):

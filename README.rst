@@ -17,14 +17,19 @@ This package has been tested in Django 1.5 and 1.6.
    :alt: django-staff-toolbar preview
 
 
+Requirements
+============
+
+Due to needing to test multiple settings, [django-app-settings](https://github.com/mwana/django-app-settings) is required.
+Make sure to install this before continuing.
+
+
 Installation
 ============
 
 First install the module, preferably in a virtual environment::
 
-    git clone https://github.com/edoburu/django-staff-toolbar.git
-    cd django-staff-toolbar
-    pip install .
+    pip install git+git://github.com/edoburu/django-staff-toolbar.git
 
 
 Configuration
@@ -42,20 +47,36 @@ Add the HTML widget to the template::
 
     {% load staff_toolbar_tags %}
 
-    {% staff_toolbar %}
+    {% render_staff_toolbar %}
 
-Make sure the layout is loaded in the template::
-
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}staff_toolbar/staff_toolbar.css" />
 
 Layout
 ------
 
-By default, a simple layout is included.
-You can change this layout to your own liking.
+There is a default stylesheet for the staff toolbar. The SASS is included in this repo to enable you to customise::
 
-The source SASS file is included, making it easier to
-integrate this into your project stylesheets when needed.
+    <link rel="stylesheet" type="text/css" href="{% static "staff_toolbar/staff_toolbar.css" %}" />
+
+To customise the HTML of the toolbar, override "staff_toolbar/toolbar.html".
+The default is::
+
+    {% load staff_toolbar_tags %}
+    <div id="django-staff-toolbar">
+        <ul>
+            {% staff_toolbar %}
+            <li>
+                {{ item }}
+                {% if children %}
+                <ul>
+                    {{ children }}
+                </ul>
+                {% endif %}
+            </li>
+            {% end_staff_toolbar %}
+        </ul>
+    </div>
+
+`children` is a special template variable which recurses over the nested items. The HTML between `{% staff_toolbar %}` and `{% end_staff_toolbar %}` will be used to display the children.
 
 
 Customizing the admin URL
@@ -69,6 +90,7 @@ The admin URL is auto-detected using:
 In some cases, this is not sufficient. When the auto-detected "Change object"
 link does not point to the right page, this can be resolved using two methods:
 
+
 Using the view
 --------------
 
@@ -76,6 +98,7 @@ When your class-based-view implements ``staff_toolbar.views.StaffUrlMixin``,
 that information will be used to render the proper "Change object" link.
 
 This requires Django 1.5, which exports the ``view`` variable to the template.
+
 
 Using the template
 ------------------
@@ -159,3 +182,9 @@ This module is designed to be generic, and easy to plug into your site.
 Pull requests and improvements are welcome!
 
 If you have any other valuable contribution, suggestion or idea, please let us know as well!
+
+
+Testing
+=======
+
+To run the tests, `python setup.py test`. This will automatically install `BeautifulSoup` and `mock`.

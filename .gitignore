@@ -3,9 +3,10 @@
 *.mo
 *.db
 *.egg-info/
-*.egg/
+*.egg
 .coverage
 .project
+.ropeproject
 .idea/
 .pydevproject
 .idea/workspace.xml
@@ -15,3 +16,6 @@
 dist/
 docs/_build/
 htmlcov/
+*.swo
+*.swp
+test_staff_toolbar

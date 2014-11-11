@@ -41,10 +41,10 @@ class LazyToolbarItem(object):
         self.kwargs = kwargs
         self.real_instance = None
 
-    def __call__(self, request, context):
+    def __call__(self, context):
         if self.real_instance is None:
             # Init on demand.
             from staff_toolbar.loading import load_toolbar_item
             self.real_instance = load_toolbar_item(self.import_path, *self.args, **self.kwargs)
 
-        return self.real_instance(request, context)
+        return self.real_instance(context)

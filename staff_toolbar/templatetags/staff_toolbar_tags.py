@@ -1,27 +1,25 @@
 from django.template import Library, Node
-from django.utils.html import format_html
-from staff_toolbar.loading import get_toolbar_root
+from django.template.loader import render_to_string
+from django.utils.html import mark_safe
+from staff_toolbar.loading import load_toolbar_item
+from djangoappsettings import settings
 
 register = Library()
 
-toolbar_root = get_toolbar_root()
-
 
 @register.simple_tag(takes_context=True)
-def staff_toolbar(context):
+def render_staff_toolbar(context):
     """
-    Display the staff toolbar
-    :param context:
-    :type context:
-    :return:
-    :rtype:
+    Renders the staff toolbar
+    Usage:
+        {% render_staff_toolbar %}
     """
     request = context['request']
     if not request.user.is_staff:
-        return u''
+        return ''
 
-    toolbar_html = toolbar_root(request, context)
-    return format_html(u'<nav id="django-staff-toolbar">{0}</nav>', toolbar_html)
+    # Return the rendered template
+    return render_to_string("staff_toolbar/toolbar.html", context_instance=context)
 
 
 @register.simple_tag(takes_context=True)
@@ -29,12 +27,36 @@ def set_staff_object(context, object):
     """
     Assign an object to be the "main object" of this page.
     Example::
-
         {% set_staff_object page %}
     """
     request = context['request']
     request.staff_object = object
     return u''
+
+
+@register.tag()
+def staff_toolbar(parser, token):
+    """
+    Iterates over the nodes in the toolbar tree, and renders the contained block for each node.
+    This tag will recursively render children into the template variable {{ children }}.
+    Usage:
+        <ul>
+            {% staff_toolbar %}
+            <li>
+                {{ node.name }}
+                {% if not node.is_leaf_node %}
+                <ul>
+                    {{ children }}
+                </ul>
+                {% endif %}
+            </li>
+            {% end_staff_toolbar %}
+        </ul>
+    """
+
+    template_nodes = parser.parse(('end_staff_toolbar',))
+    parser.delete_first_token()
+    return RecurseNode(template_nodes)
 
 
 @register.tag
@@ -58,3 +80,30 @@ class AdminUrlNode(Node):
         url = self.nodelist.render(context)
         context['request'].staff_url = url
         return u''
+
+
+class RecurseNode(Node):
+
+    def __init__(self, template_nodes):
+        self.template = "staff_toolbar/toolbar.html"
+        self.nodes = template_nodes
+
+    def _render_node(self, context, import_path):
+        bits = []
+        context.push()
+        item = load_toolbar_item(import_path)
+        if hasattr(item, 'children'):
+            for child in item.children:
+                bits.append(self._render_node(context, child))
+        context['item'] = item(context)
+        children = mark_safe(''.join(bits))
+        if children:
+            context['children'] = mark_safe(''.join(bits))
+        rendered = self.nodes.render(context)
+        context.pop()
+        return rendered
+
+    def render(self, context):
+        # For each item in settings, loop through and render
+        bits = [self._render_node(context, item) for item in settings.STAFF_TOOLBAR_ITEMS]
+        return ''.join(bits)
