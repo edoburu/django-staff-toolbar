@@ -8,11 +8,17 @@ import sys
 
 
 # When creating the sdist, make sure the django.mo file also exists:
+# For develop mode, try to compile but don't abort because it might be an fresh virtualenv install.
 if 'sdist' in sys.argv or 'develop' in sys.argv:
+    os.chdir('staff_toolbar')
     try:
-        os.chdir('staff_toolbar')
         from django.core.management.commands.compilemessages import compile_messages
         compile_messages(sys.stderr)
+        from django.core import management
+        management.call_command('compilemessages', stdout=sys.stderr, verbosity=1)
+    except ImportError:
+        if 'sdist' in sys.argv:
+            raise
     finally:
         os.chdir('..')
 
@@ -63,6 +69,11 @@ setup(
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
+        'Framework :: Django',
+        'Framework :: Django :: 1.5',
+        'Framework :: Django :: 1.6',
+        'Framework :: Django :: 1.7',
+        'Framework :: Django :: 1.8',
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
         'Topic :: Software Development :: Libraries :: Python Modules',
