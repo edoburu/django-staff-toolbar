@@ -12,6 +12,7 @@
 .tox/
 .DS_Store
 .sass-cache
+build/
 dist/
 docs/_build/
 htmlcov/
