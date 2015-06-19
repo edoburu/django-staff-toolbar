@@ -203,7 +203,13 @@ def get_object(context):
 
 
 def _admin_url(object):
-    return reverse(admin_urlname(object._meta, 'change'), args=(object.pk,))
+    url = reverse(admin_urlname(object._meta, 'change'), args=(object.pk,))
+    if hasattr(object, '_parler_meta'):
+        # django-parler's TranslatableModel object.
+        # Open the admin with the current language tab.
+        return u"{0}?language={1}".format(url, object.get_current_language())
+    else:
+        return url
 
 
 def _admin_title(object):
