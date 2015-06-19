@@ -33,7 +33,7 @@ def find_version(*parts):
 setup(
     name='django-staff-toolbar',
     version=find_version('staff_toolbar', '__init__.py'),
-    license='Apache License, Version 2.0',
+    license='Apache 2.0',
 
     install_requires=[
     ],
