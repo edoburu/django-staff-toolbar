@@ -8,6 +8,8 @@ env:
 - PACKAGES="django>=1.8,<1.9"
 - PACKAGES="django>=1.9,<1.10"
 - PACKAGES="django>=1.10,<1.11"
+before_install:
+- pip install codecov
 install:
 - pip install -U pip wheel
 - pip install -q $PACKAGES -e .
