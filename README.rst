@@ -1,3 +1,12 @@
+.. image:: https://img.shields.io/travis/edoburu/django-staff-toolbar/master.svg?branch=master
+    :target: http://travis-ci.org/edoburu/django-staff-toolbar
+.. image:: https://img.shields.io/pypi/v/django-staff-toolbar.svg
+    :target: https://pypi.python.org/pypi/django-staff-toolbar/
+.. image:: https://img.shields.io/pypi/l/django-staff-toolbar.svg
+    :target: https://pypi.python.org/pypi/django-staff-toolbar/
+.. image:: https://img.shields.io/codecov/c/github/edoburu/django-staff-toolbar/master.svg
+    :target: https://codecov.io/github/edoburu/django-staff-toolbar?branch=master
+
 django-staff-toolbar
 ====================
 
