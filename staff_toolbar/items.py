@@ -141,6 +141,8 @@ class ChangeObjectLink(Link):
     * ``request.staff_object``
     * ``view.get_staff_object()`
     * ``view.get_staff_url()`
+    * ``view.object``
+    * ``context['object']``
     """
     def get_link(self, request, context):
         # When `set_staff_object` is used, take that information,
