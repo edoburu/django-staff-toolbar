@@ -109,7 +109,7 @@ When needed, the URL can also be set:
 Customizing the menu
 ====================
 
-The default menu settings are::
+The default menu settings are:
 
 .. code-block:: python
 
