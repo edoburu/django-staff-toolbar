@@ -1,12 +1,18 @@
 """
 These are the items that can be added to the staff toolbar.
 """
+import sys
+
 from django.contrib.admin.templatetags.admin_urls import admin_urlname
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.utils.encoding import force_text
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
+
+if sys.version_info[0] >= 3:
+    basestring = str
+
 
 __all__ = (
     'Group',
