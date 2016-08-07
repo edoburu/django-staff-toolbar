@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Version 1.1.1 (2016-08-07)
+--------------------------
+
+* Fixed Python 3 issues.
+* Officially marked Python 3 support.
+
+
 Version 1.1 (2016-08-07)
 ------------------------
 
