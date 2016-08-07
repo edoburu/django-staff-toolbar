@@ -106,14 +106,14 @@ A more complex example::
 
     from django.core.urlresolvers import reverse_lazy
     from django.utils.translation import ugettext_lazy as _
-    from staff_toolbar import toolbar_item, toolbar_title, toolbar_literal
+    from staff_toolbar import toolbar_item, toolbar_link, toolbar_title, toolbar_literal
 
     STAFF_TOOLBAR_ITEMS = (
         'staff_toolbar.items.AdminIndexLink',
         'staff_toolbar.items.ChangeObjectLink',
         (
             toolbar_title(_("User")),
-            toolbar_item('staff_toolbar.items.Link', url=reverse_lazy('admin:password_change'), title=_("Change password")),
+            toolbar_link(url=reverse_lazy('admin:password_change'), title=_("Change password")),
             'staff_toolbar.items.LogoutLink',
         )
     )
