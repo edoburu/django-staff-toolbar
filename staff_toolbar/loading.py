@@ -69,7 +69,7 @@ def _import_symbol(import_path, setting_name):
     try:
         mod = import_module(mod_name)
         cls = getattr(mod, class_name)
-    except ImportError, e:
+    except ImportError as e:
         __, __, exc_traceback = sys.exc_info()
         frames = traceback.extract_tb(exc_traceback)
         if len(frames) > 1:
