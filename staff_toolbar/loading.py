@@ -13,6 +13,9 @@ try:
 except ImportError:
     from django.utils.importlib import import_module  # Python 2.6 compatibility
 
+if sys.version_info[0] >= 3:
+    basestring = str
+
 _toolbar_root = None
 
 
