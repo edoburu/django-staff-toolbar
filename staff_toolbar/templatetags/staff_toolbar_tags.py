@@ -1,5 +1,6 @@
 from django.template import Library, Node
 from django.utils.html import format_html
+
 from staff_toolbar.loading import get_toolbar_root
 
 register = Library()

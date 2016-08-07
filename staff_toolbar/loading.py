@@ -28,7 +28,7 @@ __all__ = (
 def get_toolbar_root():
     """
     Init on demand.
-    :rtype RootNode:
+    :rtype: RootNode
     """
     global _toolbar_root
     if _toolbar_root is None:
