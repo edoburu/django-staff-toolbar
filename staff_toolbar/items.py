@@ -173,7 +173,7 @@ class ChangeObjectLink(Link):
         if object and url:
             # URL and object, use that!
             return (url, _admin_title(object))
-        if object:
+        if object and object.pk:
             # No URL, take default
             return (_admin_url(object), _admin_title(object))
         if url:
