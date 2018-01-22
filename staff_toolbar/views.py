@@ -1,5 +1,9 @@
 from django.contrib.admin.templatetags.admin_urls import admin_urlname
-from django.core.urlresolvers import reverse
+
+try:
+    from django.urls import reverse  # Django 1.10+
+except ImportError:
+    from django.core.urlresolvers import reverse
 
 
 class StaffUrlMixin(object):
