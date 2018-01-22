@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Version 1.2 (2018-01-22)
+------------------------
+
+* Fixed Django 2.0 support.
+* Fixed NoReverseMatch for admin link on newly created objects
+
+
 Version 1.1.1 (2016-08-07)
 --------------------------
 
