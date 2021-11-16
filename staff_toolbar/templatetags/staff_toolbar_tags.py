@@ -19,10 +19,10 @@ def staff_toolbar(context):
     """
     request = context['request']
     if not request.user.is_staff:
-        return u''
+        return ''
 
     toolbar_html = toolbar_root(request, context)
-    return format_html(u'<nav id="django-staff-toolbar">{0}</nav>', toolbar_html)
+    return format_html('<nav id="django-staff-toolbar">{0}</nav>', toolbar_html)
 
 
 @register.simple_tag(takes_context=True)
@@ -35,7 +35,7 @@ def set_staff_object(context, object):
     """
     request = context['request']
     request.staff_object = object
-    return u''
+    return ''
 
 
 @register.tag
@@ -58,4 +58,4 @@ class AdminUrlNode(Node):
     def render(self, context):
         url = self.nodelist.render(context)
         context['request'].staff_url = url
-        return u''
+        return ''

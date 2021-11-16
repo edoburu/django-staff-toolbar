@@ -1,5 +1,3 @@
-
-
 def toolbar_title(title):
     """
     Define a title to be included in the toolbar.
@@ -29,7 +27,7 @@ def toolbar_link(url, title):
     return LazyToolbarItem('staff_toolbar.items.Link', url=url, title=title)
 
 
-class LazyToolbarItem(object):
+class LazyToolbarItem:
     """
     Internal mechanism to support lazy-loaded toolbar items in the settings.
     """

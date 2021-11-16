@@ -6,7 +6,7 @@ except ImportError:
     from django.core.urlresolvers import reverse
 
 
-class StaffUrlMixin(object):
+class StaffUrlMixin:
     """
     Provide a ``view.get_admin_url`` variable in the template.
     """

@@ -57,7 +57,7 @@ def load_toolbar_item(import_path, *args, **kwargs):
         symbol = symbol(*args, **kwargs)
 
     if not callable(symbol):
-        raise ImproperlyConfigured("The {0} in {1} is not callable!".format(import_path, 'STAFF_TOOLBAR_ITEMS'))
+        raise ImproperlyConfigured("The {} in {} is not callable!".format(import_path, 'STAFF_TOOLBAR_ITEMS'))
 
     return symbol
 
@@ -78,8 +78,8 @@ def _import_symbol(import_path, setting_name):
         if len(frames) > 1:
             raise   # import error is a level deeper.
 
-        raise ImproperlyConfigured("{0} does not point to an existing class: {1}".format(setting_name, import_path))
+        raise ImproperlyConfigured(f"{setting_name} does not point to an existing class: {import_path}")
     except AttributeError:
-        raise ImproperlyConfigured("{0} does not point to an existing class: {1}".format(setting_name, import_path))
+        raise ImproperlyConfigured(f"{setting_name} does not point to an existing class: {import_path}")
 
     return cls

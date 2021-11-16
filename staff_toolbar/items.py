@@ -4,10 +4,10 @@ These are the items that can be added to the staff toolbar.
 import sys
 
 from django.contrib.admin.templatetags.admin_urls import admin_urlname
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 try:
     from django.urls import reverse, reverse_lazy  # Django 1.10+
@@ -27,7 +27,7 @@ __all__ = (
 )
 
 
-class Title(object):
+class Title:
     """
     A title in the toolbar.
     """
@@ -35,10 +35,10 @@ class Title(object):
         self.title = title
 
     def __call__(self, request, context):
-        return format_html(u'<div class="toolbar-title">{0}</div>', self.title)
+        return format_html('<div class="toolbar-title">{0}</div>', self.title)
 
 
-class Literal(object):
+class Literal:
     """
     A literal object, that is outputted as-is.
     Use ``format_html()`` or ``mark_safe()`` to output literal HTML.
@@ -50,7 +50,7 @@ class Literal(object):
         return self.title
 
 
-class Group(object):
+class Group:
     """
     A group of items
     """
@@ -93,11 +93,11 @@ class Group(object):
         if not rows:
             return ''
 
-        li_tags = mark_safe(u"\n".join(format_html(u'<li>{0}</li>', force_text(row)) for row in rows))
+        li_tags = mark_safe("\n".join(format_html('<li>{0}</li>', force_str(row)) for row in rows))
         if self.title:
-            return format_html(u'<div class="toolbar-title">{0}</div>\n<ul>\n{1}\n</ul>', self.title, li_tags)
+            return format_html('<div class="toolbar-title">{0}</div>\n<ul>\n{1}\n</ul>', self.title, li_tags)
         else:
-            return format_html(u'<ul>\n{0}\n</ul>', li_tags)
+            return format_html('<ul>\n{0}\n</ul>', li_tags)
 
 
 class RootNode(Group):
@@ -108,7 +108,7 @@ class RootNode(Group):
 
 
 
-class Link(object):
+class Link:
     """
     Add a hard-coded link in the toolbar.
     """
@@ -124,7 +124,7 @@ class Link(object):
     def __call__(self, request, context):
         linkdata = self.get_link(request, context)
         if linkdata:
-            return format_html(u'<a href="{0}">{1}</a>', *linkdata)
+            return format_html('<a href="{0}">{1}</a>', *linkdata)
         else:
             return None
 
@@ -219,10 +219,10 @@ def _admin_url(object):
     if hasattr(object, '_parler_meta'):
         # django-parler's TranslatableModel object.
         # Open the admin with the current language tab.
-        return u"{0}?language={1}".format(url, object.get_current_language())
+        return f"{url}?language={object.get_current_language()}"
     else:
         return url
 
 
 def _admin_title(object):
-    return _('Change %s') % force_text(object._meta.verbose_name)
+    return _('Change %s') % force_str(object._meta.verbose_name)
