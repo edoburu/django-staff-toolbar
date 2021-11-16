@@ -19,11 +19,11 @@ if sys.version_info[0] >= 3:
 
 
 __all__ = (
-    'Group',
-    'RootNode',
-    'Link',
-    'AdminLink',
-    'ObjectNode',
+    "Group",
+    "RootNode",
+    "Link",
+    "AdminLink",
+    "ObjectNode",
 )
 
 
@@ -31,6 +31,7 @@ class Title:
     """
     A title in the toolbar.
     """
+
     def __init__(self, title):
         self.title = title
 
@@ -43,6 +44,7 @@ class Literal:
     A literal object, that is outputted as-is.
     Use ``format_html()`` or ``mark_safe()`` to output literal HTML.
     """
+
     def __init__(self, title):
         self.title = title
 
@@ -54,11 +56,12 @@ class Group:
     """
     A group of items
     """
+
     title = None
 
     def __init__(self, *children, **kwargs):
         self.children = list(children)
-        self.title = kwargs.get('title', self.title)
+        self.title = kwargs.get("title", self.title)
 
     def __call__(self, request, context):
         """
@@ -72,6 +75,7 @@ class Group:
         Get all rows as HTML
         """
         from staff_toolbar.loading import load_toolbar_item
+
         rows = []
         for i, hook in enumerate(self.children):
             # Allow dotted paths in groups too, loads on demand (get import errors otherwise).
@@ -91,27 +95,30 @@ class Group:
         Join the HTML rows.
         """
         if not rows:
-            return ''
+            return ""
 
-        li_tags = mark_safe("\n".join(format_html('<li>{0}</li>', force_str(row)) for row in rows))
+        li_tags = mark_safe("\n".join(format_html("<li>{0}</li>", force_str(row)) for row in rows))
         if self.title:
-            return format_html('<div class="toolbar-title">{0}</div>\n<ul>\n{1}\n</ul>', self.title, li_tags)
+            return format_html(
+                '<div class="toolbar-title">{0}</div>\n<ul>\n{1}\n</ul>', self.title, li_tags
+            )
         else:
-            return format_html('<ul>\n{0}\n</ul>', li_tags)
+            return format_html("<ul>\n{0}\n</ul>", li_tags)
 
 
 class RootNode(Group):
     """
     The root node for the toolbar.
     """
-    title = _("Staff features")
 
+    title = _("Staff features")
 
 
 class Link:
     """
     Add a hard-coded link in the toolbar.
     """
+
     # Allow to define class-level defaults.
     url = None
     title = None
@@ -136,7 +143,8 @@ class AdminIndexLink(Link):
     """
     A link to the admin index.
     """
-    url = reverse_lazy('admin:index')
+
+    url = reverse_lazy("admin:index")
     title = _("Admin dashboard")
 
 
@@ -154,20 +162,21 @@ class ChangeObjectLink(Link):
     * ``view.object``
     * ``context['object']``
     """
+
     def get_link(self, request, context):
         # When `set_staff_object` is used, take that information,
-        object = getattr(request, 'staff_object', None)
-        url = getattr(request, 'staff_url', None)
+        object = getattr(request, "staff_object", None)
+        url = getattr(request, "staff_url", None)
 
         if not object and not url:
             # If the information was not passed in the template,
             # the view can also be queried.
-            view = context.get('view')
+            view = context.get("view")
             if view is not None:
                 # Implementing StaffUrlMixin
-                if hasattr(view, 'get_staff_url'):
+                if hasattr(view, "get_staff_url"):
                     url = view.get_staff_url()
-                if hasattr(view, 'get_staff_object'):
+                if hasattr(view, "get_staff_object"):
                     object = view.get_staff_object()
 
             if not object:
@@ -191,9 +200,9 @@ class LogoutLink(Link):
     """
     A logoff link.
     """
-    url = reverse_lazy('admin:logout')
-    title = _("Logout")
 
+    url = reverse_lazy("admin:logout")
+    title = _("Logout")
 
 
 def get_object(context):
@@ -202,21 +211,21 @@ def get_object(context):
     """
     object = None
 
-    view = context.get('view')
+    view = context.get("view")
     if view:
         # View is more reliable then an 'object' variable in the context.
         # Works if this is a SingleObjectMixin
-        object = getattr(view, 'object', None)
+        object = getattr(view, "object", None)
 
     if object is None:
-        object = context.get('object', None)
+        object = context.get("object", None)
 
     return object
 
 
 def _admin_url(object):
-    url = reverse(admin_urlname(object._meta, 'change'), args=(object.pk,))
-    if hasattr(object, '_parler_meta'):
+    url = reverse(admin_urlname(object._meta, "change"), args=(object.pk,))
+    if hasattr(object, "_parler_meta"):
         # django-parler's TranslatableModel object.
         # Open the admin with the current language tab.
         return f"{url}?language={object.get_current_language()}"
@@ -225,4 +234,4 @@ def _admin_url(object):
 
 
 def _admin_title(object):
-    return _('Change %s') % force_str(object._meta.verbose_name)
+    return _("Change %s") % force_str(object._meta.verbose_name)

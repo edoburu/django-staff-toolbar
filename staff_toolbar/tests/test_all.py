@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AnonymousUser
-from django.test import RequestFactory
-from django.test import TestCase
+from django.test import RequestFactory, TestCase
+
 from staff_toolbar import appsettings
 from staff_toolbar.loading import get_toolbar_root
 
@@ -9,7 +9,7 @@ def get_dummy_request():
     """
     Returns a Request instance.
     """
-    request = RequestFactory().get("/", HTTP_HOST='example.org')
+    request = RequestFactory().get("/", HTTP_HOST="example.org")
     request.session = {}
     request.user = AnonymousUser()
     return request
@@ -29,11 +29,11 @@ class StaffToolbarTests(TestCase):
         html = root(request, {})
         self.assertHTMLEqual(
             html,
-            '''
+            """
             <div class="toolbar-title">Staff features</div>
             <ul>
                 <li><a href="/admin/">Admin dashboard</a></li>
                 <li><a href="/admin/logout/">Logout</a></li>
             </ul>
-            '''
+            """,
         )

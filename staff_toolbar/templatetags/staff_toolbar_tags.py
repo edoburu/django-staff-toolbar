@@ -17,9 +17,9 @@ def staff_toolbar(context):
     :return:
     :rtype:
     """
-    request = context['request']
+    request = context["request"]
     if not request.user.is_staff:
-        return ''
+        return ""
 
     toolbar_html = toolbar_root(request, context)
     return format_html('<nav id="django-staff-toolbar">{0}</nav>', toolbar_html)
@@ -33,9 +33,9 @@ def set_staff_object(context, object):
 
         {% set_staff_object page %}
     """
-    request = context['request']
+    request = context["request"]
     request.staff_object = object
-    return ''
+    return ""
 
 
 @register.tag
@@ -46,7 +46,7 @@ def set_staff_url(parser, token):
 
         {% set_staff_url %}{% url 'admin:fluent_pages_page_change' page.id %}{% end_set_staff_url %}
     """
-    nodelist = parser.parse(('end_set_staff_url',))
+    nodelist = parser.parse(("end_set_staff_url",))
     parser.delete_first_token()
     return AdminUrlNode(nodelist)
 
@@ -57,5 +57,5 @@ class AdminUrlNode(Node):
 
     def render(self, context):
         url = self.nodelist.render(context)
-        context['request'].staff_url = url
-        return ''
+        context["request"].staff_url = url
+        return ""

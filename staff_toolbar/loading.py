@@ -2,11 +2,13 @@
 The internal machinery to load the toolbar items.
 """
 import inspect
-import traceback
 import sys
+import traceback
+
 from django.core.exceptions import ImproperlyConfigured
+
 from staff_toolbar import appsettings
-from staff_toolbar.items import RootNode, Group
+from staff_toolbar.items import Group, RootNode
 
 try:
     from importlib import import_module
@@ -19,10 +21,7 @@ if sys.version_info[0] >= 3:
 _toolbar_root = None
 
 
-__all__ = (
-    'get_toolbar_root',
-    'load_toolbar_item'
-)
+__all__ = ("get_toolbar_root", "load_toolbar_item")
 
 
 def get_toolbar_root():
@@ -48,7 +47,7 @@ def load_toolbar_item(import_path, *args, **kwargs):
         children = [load_toolbar_item(path) for path in import_path]
         return Group(*children)
     elif isinstance(import_path, basestring):
-        symbol = _import_symbol(import_path, 'STAFF_TOOLBAR_ITEMS')
+        symbol = _import_symbol(import_path, "STAFF_TOOLBAR_ITEMS")
     else:
         symbol = import_path
 
@@ -57,7 +56,9 @@ def load_toolbar_item(import_path, *args, **kwargs):
         symbol = symbol(*args, **kwargs)
 
     if not callable(symbol):
-        raise ImproperlyConfigured("The {} in {} is not callable!".format(import_path, 'STAFF_TOOLBAR_ITEMS'))
+        raise ImproperlyConfigured(
+            "The {} in {} is not callable!".format(import_path, "STAFF_TOOLBAR_ITEMS")
+        )
 
     return symbol
 
@@ -66,7 +67,7 @@ def _import_symbol(import_path, setting_name):
     """
     Import a class or function by name.
     """
-    mod_name, class_name = import_path.rsplit('.', 1)
+    mod_name, class_name = import_path.rsplit(".", 1)
 
     # import module
     try:
@@ -76,10 +77,14 @@ def _import_symbol(import_path, setting_name):
         __, __, exc_traceback = sys.exc_info()
         frames = traceback.extract_tb(exc_traceback)
         if len(frames) > 1:
-            raise   # import error is a level deeper.
+            raise  # import error is a level deeper.
 
-        raise ImproperlyConfigured(f"{setting_name} does not point to an existing class: {import_path}")
+        raise ImproperlyConfigured(
+            f"{setting_name} does not point to an existing class: {import_path}"
+        )
     except AttributeError:
-        raise ImproperlyConfigured(f"{setting_name} does not point to an existing class: {import_path}")
+        raise ImproperlyConfigured(
+            f"{setting_name} does not point to an existing class: {import_path}"
+        )
 
     return cls
