@@ -18,20 +18,23 @@ sys.stderr.write(
 if not settings.configured:
     settings.configure(
         DATABASES={"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ":memory:"}},
+        DEFAULT_AUTO_FIELD="django.db.models.BigAutoField",
         INSTALLED_APPS=(
+            "django.contrib.admin",
             "django.contrib.auth",
             "django.contrib.contenttypes",
-            "django.contrib.sites",
-            "django.contrib.admin",
+            "django.contrib.messages",
             "django.contrib.sessions",
+            "django.contrib.sites",
             "staff_toolbar",
         ),
-        MIDDLEWARE_CLASSES=(
-            "django.middleware.common.CommonMiddleware",
-            "django.contrib.sessions.middleware.SessionMiddleware",
-            "django.middleware.csrf.CsrfViewMiddleware",
+        MIDDLEWARE=(
             "django.contrib.auth.middleware.AuthenticationMiddleware",
+            "django.contrib.messages.middleware.MessageMiddleware",
+            "django.contrib.sessions.middleware.SessionMiddleware",
         ),
+        SECRET_KEY="testtest",
+        STATIC_URL="/static/",
         TEST_RUNNER="django.test.runner.DiscoverRunner",
         ROOT_URLCONF="staff_toolbar.tests.urls",
         TEMPLATES=[
@@ -50,6 +53,7 @@ if not settings.configured:
                         "django.template.context_processors.request",
                         "django.template.context_processors.static",
                         "django.contrib.auth.context_processors.auth",
+                        "django.contrib.messages.context_processors.messages",
                     ),
                 },
             },
